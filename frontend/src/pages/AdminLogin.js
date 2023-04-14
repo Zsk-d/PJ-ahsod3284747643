@@ -1,16 +1,12 @@
 import { React, useState } from 'react';
-// import { useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button, Form, Input, Card, message } from 'antd';
-
-// import Util from '../util';
 
 import Header from '../components/StationHeader'
 import util from '../util';
 
 const Page = () => {
-  // const navigate = useNavigate()
-  //   const location = useLocation()
-  // const state = location.state
+  const navigate = useNavigate()
   const [messageApi, contextHolder] = message.useMessage();
   const onFinish = (params) => {
     console.log('Success:', params)
@@ -22,6 +18,7 @@ const Page = () => {
       } else {
         util.setLoginInfo({ token: res.token, email })
         messageApi.info('Success !');
+        navigate('/admin-main')
       }
     })
   }
@@ -51,7 +48,7 @@ const Page = () => {
             initialValues={{ remember: true, }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off"
+            // autoComplete="off"
           >
             <Form.Item
               label="Email"

@@ -1,4 +1,3 @@
-let token = ''
 const urls = {
   prev: '',
 
@@ -30,6 +29,19 @@ const urls = {
 }
 
 const util = {}
+util.getSession = (key) => {
+  return sessionStorage.getItem(key);
+}
+util.getObjSession = (key) => {
+  return JSON.parse(util.getSession(key));
+}
+util.setSession = (key, value) => {
+  return sessionStorage.setItem(key, typeof (value) === 'string' ? value : JSON.stringify(value));
+}
+util.clearSession = () => {
+  sessionStorage.clear();
+}
+let token = util.getSession('token')
 util.fetch = (url, method, okCallback, errorCallback, data, headers) => {
   const option = {
     method,
@@ -79,18 +91,6 @@ util.fetchConfig = {
 util.deepCopy = (obj) => {
   return JSON.parse(JSON.stringify(obj));
 }
-util.getSession = (key) => {
-  return sessionStorage.getItem(key);
-}
-util.getObjSession = (key) => {
-  return JSON.parse(util.getSession(key));
-}
-util.setSession = (key, value) => {
-  return sessionStorage.setItem(key, typeof (value) === 'string' ? value : JSON.stringify(value));
-}
-util.clearSession = () => {
-  sessionStorage.clear();
-}
 util.isLogin = () => {
   return util.getObjSession('userinfo')
 }
@@ -108,6 +108,7 @@ export default {
     util.postJson(urls.login, res => {
       if (res.token) {
         token = res.token
+        util.setSession('token', res.token)
       }
       cb(res)
     }, null, { email, password })
@@ -116,17 +117,34 @@ export default {
     util.postJson(urls.register, res => {
       if (res.token) {
         token = res.token
+        util.setSession('token', res.token)
       }
       cb(res)
     }, null, { email, password, name })
   },
   logout (cb) {
-    util.postJson(urls.register, res => {
+    util.postJson(urls.logout, res => {
       if (!res.error) {
         token = null
         console.log('-----< Clear token')
       }
+      util.clearSession()
       cb(res)
-    }, null, null)
+    }, null, { })
+  },
+  getQuizList (cb) {
+    util.getJson(urls.getQuizList, res => {
+      cb(res)
+    })
+  },
+  getQuizById (id, cb) {
+    util.getJson(urls.getQuizById.replace('{quizid}', id), res => {
+      cb(res)
+    })
+  },
+  createQuiz (name, cb) {
+    util.postJson(urls.createQuiz, res => {
+      cb(res)
+    }, null, { name })
   }
 }

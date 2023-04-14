@@ -1,10 +1,11 @@
 import { React } from 'react';
-import { Button, Layout, message } from 'antd';
+import { Button, Layout } from 'antd';
+import { useNavigate } from 'react-router-dom'
 import util from '../util';
 const { Header } = Layout;
 
 const StationHeader = ({ title, hideBackBtn, hasLogoutBtn }) => {
-  const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate()
   const titleStyle = {
     fontSize: 21,
     fontWeight: 'bold'
@@ -16,11 +17,11 @@ const StationHeader = ({ title, hideBackBtn, hasLogoutBtn }) => {
     alignItems: 'center',
     justifyContent: 'space-between',
   };
-  return (<>{contextHolder}
+  return (<>
     <Header style={headerStyle}>
       {title ? <label style={titleStyle}>{title}</label> : null}
       {!hideBackBtn ? <Button type='primary' onClick={() => { window.history.back() }} > Go back</Button> : <label> </label>}
-      {hasLogoutBtn ? <Button type='primary' onClick={() => { util.logout(res => { if (res.error) { messageApi.error(res.error) } }) }} > Log out</Button> : null}
+      {hasLogoutBtn ? <Button type='primary' onClick={() => { util.logout(() => { navigate('/') }) }} > Log out</Button> : null}
     </Header></>)
 }
 

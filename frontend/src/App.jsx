@@ -6,6 +6,8 @@ import AdminLogin from './pages/AdminLogin';
 import AdminReg from './pages/AdminReg';
 import AdminMain from './pages/AdminMain';
 import QuizMain from './pages/QuizMain';
+import Question from './pages/Question';
+import Game from './pages/Game';
 
 function App () {
   return (
@@ -19,6 +21,8 @@ function App () {
               <Route path='/admin-reg' element={<AdminReg />}></Route>
               <Route path='/admin-main' element={<AdminMain />}></Route>
               <Route path='/quiz-main' element={<QuizMain />}></Route>
+              <Route path='/question' element={<Question />}></Route>
+              <Route path='/game' element={<Game />}></Route>
             </Routes>
           </div>
         </Router>

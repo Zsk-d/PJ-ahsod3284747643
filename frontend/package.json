@@ -19,12 +19,6 @@
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "coverage": "npm run test -- --watchAll=false --coverage"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",

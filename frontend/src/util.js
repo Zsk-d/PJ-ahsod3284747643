@@ -146,5 +146,41 @@ export default {
     util.postJson(urls.createQuiz, res => {
       cb(res)
     }, null, { name })
-  }
+  },
+  updateQuizById (id, questions, name, thumbnail, cb) {
+    util.putJson(urls.updateQuizById.replace('{quizid}', id), res => {
+      cb(res)
+    }, null, { questions, name, thumbnail })
+  },
+  startQuizById (id, cb) {
+    util.postJson(urls.startQuizById.replace('{quizid}', id), res => {
+      cb(res)
+    }, null, { })
+  },
+  stopQuizById (id, cb) {
+    util.postJson(urls.endQuizById.replace('{quizid}', id), res => {
+      cb(res)
+    }, null, { })
+  },
+  joinBySessionid (id, name, cb) {
+    util.postJson(urls.joinBySessionid.replace('{sessionid}', id), res => {
+      cb(res)
+    }, null, { name })
+  },
+  advanceQuizById (id, cb) {
+    util.postJson(urls.advanceQuizById.replace('{quizid}', id), res => {
+      cb(res)
+    }, null, { })
+  },
+  getQuestion (id, cb) {
+    util.getJson(urls.getQuestion.replace('{playerid}', id), res => {
+      cb(res)
+    })
+  },
+  deleteQuizById (id, cb) {
+    util.delete(urls.deleteQuizById.replace('{quizid}', id), res => {
+      cb(res)
+    })
+  },
+  
 }

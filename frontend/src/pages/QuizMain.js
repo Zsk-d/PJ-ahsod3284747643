@@ -1,12 +1,12 @@
 import { React, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { message, Table, Button, Input, Space } from 'antd';
 
 import Header from '../components/StationHeader'
 import util from '../util';
 
 const Page = () => {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const location = useLocation()
   const state = location.state
   const record = state.record
@@ -14,18 +14,20 @@ const Page = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [quizItemList, squizItemList] = useState([])
   const [newQuizName, snewQuizName] = useState('')
+  const [thumbnail, sthumbnail] = useState('')
 
   const contentStyle = {
     padding: '10px'
   }
   useEffect(() => {
     snewQuizName(record.name)
+    sthumbnail(record.thumbnail)
     util.getQuizById(record.id, res => {
       if (res.error) {
         messageApi.error(res.error)
       } else {
         console.log('-----< res.questions', res)
-        squizItemList([])
+        squizItemList(res.questions)
       }
     })
   }, [])
@@ -33,27 +35,35 @@ const Page = () => {
   return (
     <>
       {contextHolder}
-      <Header title={'Quiz: ' + record.name} hasLogoutBtn={true}></Header>
+      <Header title={'Quiz'} hasLogoutBtn={true}></Header>
       <div style={contentStyle}>
         <div>
-          <label>Name:</label>
-          <Input style={{ width: 200 }} value={newQuizName} onChange={e => {
-            snewQuizName(e.target.value)
-          }}></Input>
+          <div style={{ display: 'inline-block' }}><label>Name: </label>
+            <Input style={{ width: 200 }} value={newQuizName} onChange={e => {
+              snewQuizName(e.target.value)
+            }}></Input></div>
+          <div style={{ display: 'inline-block' }}>
+            <label> thumbnail: </label>
+            <Input style={{ width: 200 }} value={thumbnail} onChange={e => {
+              sthumbnail(e.target.value)
+            }}></Input>
+          </div>
           <Button style={{ margin: '10px 0px' }} onClick={() => {
-            util.createQuiz(newQuizName, res => {
+            util.updateQuizById(record.id, null, newQuizName, thumbnail, res => {
               if (res.error) {
                 messageApi.error(res.error)
               } else {
                 messageApi.success('Success !')
-                reload()
               }
             })
-          }}>Create</Button>
+          }}>Change</Button>
+          <Button style={{ margin: '10px 0px' }} onClick={() => {
+            navigate('/question', { state: { action: 'add', record: { id: record.id, questions: quizItemList || [] } } })
+          }}>Create question</Button>
         </div>
         <Table dataSource={quizItemList} columns={[{
-          title: 'Title',
-          dataIndex: 'title',
+          title: 'content',
+          dataIndex: 'content',
           key: 'title'
         }, {
           title: 'type',
@@ -62,10 +72,20 @@ const Page = () => {
         }, {
           title: 'Action',
           key: 'id',
-          render: (_, record) => (
+          render: (_, _record) => (
             <Space size="middle">
-              <Button onClick={() => { }}>edit</Button>
-              <Button onClick={() => { }}>delete</Button>
+              <Button onClick={() => { navigate('/question', { state: { action: 'edit', record: { id: record.id, questions: quizItemList.filter(item => item.content !== _record.content), question: _record } } }) }}>edit</Button>
+              <Button onClick={() => {
+                quizItemList.splice(quizItemList.indexOf(quizItemList.filter(item => item.content !== _record.content)), 1)
+                util.updateQuizById(record.id, quizItemList, null, null, res => {
+                  if (res.error) {
+                    messageApi.error(res.error)
+                  } else {
+                    messageApi.success('Success !')
+                    reload()
+                  }
+                })
+              }}>delete</Button>
             </Space>
           ),
         }

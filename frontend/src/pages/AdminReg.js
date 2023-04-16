@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-// import { useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button, Form, Input, Card, message } from 'antd';
 
 // import Util from '../util';
@@ -8,7 +8,7 @@ import Header from '../components/StationHeader'
 import util from '../util';
 
 const Page = () => {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   //   const location = useLocation()
   // const state = location.state
   const [messageApi, contextHolder] = message.useMessage();
@@ -25,6 +25,7 @@ const Page = () => {
         } else {
           util.setLoginInfo({ token: res.token, email, name })
           messageApi.info('Success !');
+          navigate('/admin-main')
         }
       })
     }

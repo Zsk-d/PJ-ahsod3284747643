@@ -187,6 +187,16 @@ export default {
       cb(res)
     })
   },
+  getresults (id, cb) {
+    util.getJson(urls.getresults.replace('{playerid}', id), res => {
+      cb(res)
+    })
+  },
+  getResultsBySessionid (id, cb) {
+    util.getJson(urls.getResultsBySessionid.replace('{sessionid}', id), res => {
+      cb(res)
+    })
+  },
   deleteQuizById (id, cb) {
     util.delete(urls.deleteQuizById.replace('{quizid}', id), res => {
       cb(res)

@@ -7,6 +7,12 @@ import util from '../util';
 
 const Page = () => {
   const [form, sform] = useState({})
+  const [option1, soption1] = useState('')
+  const [option2, soption2] = useState('')
+  const [option3, soption3] = useState('')
+  const [option4, soption4] = useState('')
+  const [option5, soption5] = useState('')
+  const [option6, soption6] = useState('')
   const location = useLocation()
   const state = location.state
   const action = state.action
@@ -18,6 +24,8 @@ const Page = () => {
 
   const onFinish = (values) => {
     console.log('Success:', values);
+    debugger
+    values = {...values, option1,option2,option3,option4,option5,option6}
     util.updateQuizById(record.id, [...record.questions, values], null, null, res => {
       if (res.error) {
         messageApi.error(res.error)
@@ -35,8 +43,14 @@ const Page = () => {
   }
   useEffect(() => {
     if (action === 'edit') {
-      const { content, type, timeLimit, score, url } = state.record.question
+      const { content, type, timeLimit, score, url,option1,option2,option3,option4,option5,option6 } = state.record.question
       sform({ content, type, timeLimit, score, url })
+      soption1(option1)
+      soption2(option2)
+      soption3(option3)
+      soption4(option4)
+      soption5(option5)
+      soption6(option6)
       console.log('11111111111111111111111111111')
     }
   }, [])
@@ -110,6 +124,14 @@ const Page = () => {
             }} />
           </Form.Item>
           <Form.Item
+            label="Thumbnail"
+            name="thumbnail">
+            <Input value={form.thumbnail} onChange={e => {
+              form.thumbnail = e.target.value
+              sform(form)
+            }} />
+          </Form.Item>
+          <Form.Item
             label="Score"
             name="score"
             rules={[
@@ -137,7 +159,7 @@ const Page = () => {
             label="Answers"
             name="answers"
           >
-            <Input value={form.answers} onChange={e => {
+            <Input placeholder='Please sperate with ",", eg. 1,2,4' value={form.answers} onChange={e => {
               form.url = e.target.answers
               sform(form)
             }} />
@@ -146,7 +168,12 @@ const Page = () => {
             label="Options"
             name="options"
           >
-            <Input style={{ margin: '5px 0px' }} value={form.options} onChange={e => { form.options = e.target.value; sform(form) }} />
+            <div style={{ display: 'inline-block' }}>1. <Input style={{ margin: '5px 5px', width: 150 }} value={option1} onChange={e => { soption1(e.target.value); }} /></div>
+            <div style={{ display: 'inline-block' }}>2. <Input style={{ margin: '5px 5px', width: 150 }} value={option2} onChange={e => { soption2(e.target.value); }} /></div>
+            <div style={{ display: 'inline-block' }}>3. <Input style={{ margin: '5px 5px', width: 150 }} value={option3} onChange={e => { soption3(e.target.value); }} /></div>
+            <div style={{ display: 'inline-block' }}>4. <Input style={{ margin: '5px 5px', width: 150 }} value={option4} onChange={e => { soption4(e.target.value); }} /></div>
+            <div style={{ display: 'inline-block' }}>5. <Input style={{ margin: '5px 5px', width: 150 }} value={option5} onChange={e => { soption5(e.target.value); }} /></div>
+            <div style={{ display: 'inline-block' }}>6. <Input style={{ margin: '5px 5px', width: 150 }} value={option6} onChange={e => { soption6(e.target.value); }} /></div>
           </Form.Item>
           <Form.Item
             wrapperCol={{

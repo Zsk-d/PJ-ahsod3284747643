@@ -152,6 +152,11 @@ export default {
       cb(res)
     }, null, { questions, name, thumbnail })
   },
+  submitAnswer (id, answerIds, cb) {
+    util.putJson(urls.submitAnswer.replace('{playerid}', id), res => {
+      cb(res)
+    }, null, { answerIds })
+  },
   startQuizById (id, cb) {
     util.postJson(urls.startQuizById.replace('{quizid}', id), res => {
       cb(res)
@@ -171,6 +176,11 @@ export default {
     util.postJson(urls.advanceQuizById.replace('{quizid}', id), res => {
       cb(res)
     }, null, { })
+  },
+  getAnswer (id, cb) {
+    util.getJson(urls.getAnswer.replace('{playerid}', id), res => {
+      cb(res)
+    })
   },
   getQuestion (id, cb) {
     util.getJson(urls.getQuestion.replace('{playerid}', id), res => {

@@ -8,11 +8,13 @@ import { Button, Modal, Input, message, Descriptions, Radio, Space } from 'antd'
 import Header from '../components/StationHeader'
 import util from '../util';
 let timer = null
+let mremainder = 999999
 const Page = () => {
   const [question, squestion] = useState({})
   const [watting, swatting] = useState(true)
+  const [wattingNext, swattingNext] = useState(false)
   const [answers, sanswers] = useState([])
-  const [remainder, sremainder] = useState(99999999)
+  const [remainder, sremainder] = useState(0)
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate()
   const location = useLocation()
@@ -20,6 +22,7 @@ const Page = () => {
   let sessionId = state.sessionId
   let name = state.name
   let playerId = state.playerId
+  let currentGameId = null
 
   const gridStyle = {
     display: 'flex',
@@ -30,31 +33,35 @@ const Page = () => {
     alignItems: 'center',
     justifyContent: 'center'
   };
-  useEffect(() => {
-    if (timer) {
-      clearInterval(timer)
-      timer = null
-    }
+  const getQuestion = () => {
     timer = setInterval(() => {
       util.getQuestion(playerId, res => {
         if (res.error) {
 
         } else {
           squestion(res.question)
+          currentGameId = res.question.content
           swatting(false)
           clearInterval(timer)
-          sremainder(parseInt(res.question.timeLimit))
+          mremainder = parseInt(res.question.timeLimit)
           let tt = setInterval(() => {
-            if (remainder <= 1) {
+            if (mremainder < 1) {
+              sremainder(mremainder)
               clearInterval(tt)
-              debugger
             } else {
-              sremainder(remainder - 1)
+              sremainder(mremainder --)
             }
           }, 1000);
         }
       })
     }, 3 * 1000);
+  }
+  useEffect(() => {
+    if (timer) {
+      clearInterval(timer)
+      timer = null
+    }
+    getQuestion()
   }, [])
   return (
     <>
@@ -69,19 +76,34 @@ const Page = () => {
           <Descriptions.Item label="Type">{question.type}</Descriptions.Item>
           <Descriptions.Item label="Options">
             {question.type === 'single' ? <>
-              <Radio.Group onChange={e => {
+              <Radio.Group disabled={wattingNext} onChange={e => {
                 sanswers(e.target.value)
               }} value={answers}>
                 <Space direction="vertical">
                   {question.options.split(',').map(item => {
-                    return <Radio value={item}>{item}</Radio>
+                    return <Radio value={question.options.split(',').indexOf(item)}>{item}</Radio>
                   })}
                 </Space>
               </Radio.Group>
             </> : <></>}
           </Descriptions.Item>
         </Descriptions>
-        <Button style={{ margin: '20px 0px' }}>Submit</Button>
+        <Button disabled={wattingNext} style={{ margin: '20px 0px' }} onClick={() => {
+          debugger
+          let ids = []
+          if(answers.length == undefined){
+            ids.push(answers)
+          }
+          util.submitAnswer(playerId, ids, res => {
+            if (res.error) {
+              // 已经是最后一个问题或者已经提交过, 等待
+              swatting(false)
+              getQuestion()
+            } else {
+              // 提交成功, 并且还有下一个问题
+            }
+          })
+        }}>Submit</Button>
       </> : null}
     </>)
 }

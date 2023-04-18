@@ -104,17 +104,13 @@ const Page = () => {
       {question ? <>
         <div style={{ margin: 10, display: 'flex', justifyContent: 'space-between' }}>
           <div></div>
-          <div><label>{question.content}</label></div>
-          <div><label>Remainder:  {remainder}</label></div>
+          <div><label style={{fontSize: '30px', fontWeight: 'bold', textAlign: 'center'}}>{question.content}</label></div>
+          <div><label>Remaining time:  {remainder}</label></div>
         </div>
+        <div style={{margin: 10, display: 'flex',justifyContent: 'center',alignItems: 'center'}}><img style={{ width:500 }} src={question.thumbnail} /></div>
         <Descriptions bordered>
           <Descriptions.Item label="Type">{question.type}</Descriptions.Item>
-          <Descriptions.Item label="Thumbnail">
-            <img style={{ width: 100 }} src={question.thumbnail} />
-          </Descriptions.Item>
           <Descriptions.Item label="Score">{question.score}</Descriptions.Item>
-          <Descriptions.Item label="Time Limit">{question.timeLimit}</Descriptions.Item>
-          <Descriptions.Item label="Type">{question.type}</Descriptions.Item>
           <Descriptions.Item label="Options">
             {question.type === 'single' ? <>
               <Radio.Group disabled={wattingNext} onChange={e => {

@@ -128,7 +128,10 @@ const Page = () => {
           <Form.Item
             label="Thumbnail"
             name="thumbnail">
-            <img style={{ width: '100px', margin: '0px 10px' }} src={thumbnail} />
+              <img style={{ width: '100px', margin: '0px 10px' }} src={thumbnail} />
+              <Input value={thumbnail} onChange={e => {
+                sthumbnail(e.target.value)
+              }}/> 
             <input id="pic" type="file" onChange={() => {
               let file = document.getElementById('pic').files[0]
               let reader = new FileReader();
@@ -142,7 +145,7 @@ const Page = () => {
                   sthumbnail(reader.result)
                 }
               }
-            }}></input>
+            }}/>
 
           </Form.Item>
           <Form.Item

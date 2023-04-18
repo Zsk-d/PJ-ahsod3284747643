@@ -67,7 +67,7 @@ const Page = () => {
         {quizList.map(item => {
           return <Descriptions key={item.name}>
             <Descriptions.Item label="Name">{item.name}</Descriptions.Item>
-            <Descriptions.Item label="Thumbnail"><img v-show="showQR" style={{ width: 100 }} src={item.thumbnail} /></Descriptions.Item>
+            <Descriptions.Item label="Thumbnail"><img style={{ width: 100 }} src={item.thumbnail} /></Descriptions.Item>
             <Descriptions.Item label="Number of questions">{item.qus.length}</Descriptions.Item>
             <Descriptions.Item label="Total time">{item.timeTotal} s</Descriptions.Item>
             <Descriptions.Item label="Action">

@@ -59,7 +59,10 @@ const Page = () => {
           <div style={{ display: 'inline-block' }}>
             <label style={{margin: '0px 10px'}}> Thumbnail: </label>
             {thumbnail ? <img style={{width: '100px', margin: '0px 10px'}} src={thumbnail} /> : null}
-            <input id="pic" type="file" onChange={() => { onFileChange() }}></input>
+            <Input style={{width: 200}} value={thumbnail} onChange={e => {
+                sthumbnail(e.target.value)
+              }}/>
+            <input id="pic" type="file" onChange={() => { onFileChange() }}/>
           </div>
           <Button style={{ margin: '10px 0px' }} onClick={() => {
             util.updateQuizById(record.id, null, newQuizName, thumbnail, res => {

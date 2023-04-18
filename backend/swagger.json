@@ -401,6 +401,9 @@
                     "schema": {
                         "type": "object",
                         "properties": {
+                            "quizId": {
+                                "$ref": "#/components/fields/QuizId"
+                            }
                         }
                     }
                 },                
@@ -546,7 +549,7 @@
                     }
                 },
                 "PlayerQuestion": {
-                    "description": "OK - results of your customer.js 'quizQuestionPublicReturn', along with time that the question started!",
+                    "description": "OK - results of your custom.js 'quizQuestionPublicReturn', along with time that the question started!",
                     "schema": {
                         "type": "object",
                         "properties": {

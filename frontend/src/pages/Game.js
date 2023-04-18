@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import { Card } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Button, Modal, Input, message, Descriptions, Radio, Space } from 'antd';
+import { Button, Modal, Checkbox, message, Descriptions, Radio, Space } from 'antd';
 
 // import Util from '../util';
 
@@ -16,6 +16,12 @@ const Page = () => {
   const [wattingNext, swattingNext] = useState(false)
   const [currentGameId, scurrentGameId] = useState(false)
   const [answers, sanswers] = useState(1)
+  const [c1, sc1] = useState(true)
+  const [c2, sc2] = useState(false)
+  const [c3, sc3] = useState(false)
+  const [c4, sc4] = useState(false)
+  const [c5, sc5] = useState(false)
+  const [c6, sc6] = useState(false)
   const [remainder, sremainder] = useState(0)
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate()
@@ -57,6 +63,14 @@ const Page = () => {
             scurrentGameId(res.question.content)
             swattingNext(false)
           }
+          if(res.question.type == 'multiple'){
+            sanswers([])
+            setTimeout(() => {
+              document.getElementById('c1-el').click()
+            }, 500);
+          }else{
+            sanswers(1)
+          }
           swatting(false)
           clearInterval(timer)
           mremainder = parseInt(res.question.timeLimit)
@@ -89,7 +103,7 @@ const Page = () => {
       {watting ? <><h2>Waiting for session to start...</h2></> : null}
       {question ? <>
         <Descriptions title={question.content + ' - Remainder: ' + remainder} bordered>
-          <Descriptions.Item label="Type">{question.utl}</Descriptions.Item>
+          <Descriptions.Item label="Type">{question.type}</Descriptions.Item>
           <Descriptions.Item label="Thumbnail">
             <img style={{ width: 100 }} src={question.thumbnail} />
           </Descriptions.Item>
@@ -110,14 +124,24 @@ const Page = () => {
                   {question.option6 ? <Radio value={6}>{question.option6}</Radio> : null}
                 </Space>
               </Radio.Group>
-            </> : <></>}
+            </> : <>
+              {question.option1 ? <Checkbox id='c1-el' value={'1'} onChange={e => { e.target.checked?answers.push('1'):answers.splice(answers.indexOf('1'), 1); console.log(answers)  }}>{question.option1}</Checkbox> : null}
+              {question.option2 ? <Checkbox value={'2'} onChange={e => { e.target.checked?answers.push('2'):answers.splice(answers.indexOf('2'), 1); console.log(answers)  }}>{question.option2}</Checkbox> : null}
+              {question.option3 ? <Checkbox value={'3'} onChange={e => { e.target.checked?answers.push('3'):answers.splice(answers.indexOf('3'), 1); console.log(answers)  }}>{question.option3}</Checkbox> : null}
+              {question.option4 ? <Checkbox value={'4'} onChange={e => { e.target.checked?answers.push('4'):answers.splice(answers.indexOf('4'), 1); console.log(answers)  }}>{question.option4}</Checkbox> : null}
+              {question.option5 ? <Checkbox value={'5'} onChange={e => { e.target.checked?answers.push('5'):answers.splice(answers.indexOf('5'), 1); console.log(answers)  }}>{question.option5}</Checkbox> : null}
+              {question.option6 ? <Checkbox value={'6'} onChange={e => { e.target.checked?answers.push('6'):answers.splice(answers.indexOf('6'), 1); console.log(answers)  }}>{question.option6}</Checkbox> : null}
+            </>}
           </Descriptions.Item>
         </Descriptions>
         <Button id='submit-btn' style={{ margin: '20px 0px', display: 'none' }} onClick={() => {
           let ids = []
           if (answers.length == undefined) {
             ids.push(answers)
+          }else{
+            ids = answers
           }
+          debugger
           util.submitAnswer(playerId, ids, res => {
             let ans = question.answers.split(',')
             let ansStr = ""

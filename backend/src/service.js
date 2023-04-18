@@ -334,7 +334,7 @@ export const playerJoin = (name, sessionId) => sessionLock((resolve, reject) => 
     return reject(new InputError('Name must be supplied'));
   } else {
     const session = getActiveSessionFromSessionId(sessionId);
-    if (session.position > 0) {
+    if (session.position >= 0) {
       return reject(new InputError('Session has already begun'));
     } else {
       const id = newPlayerId();

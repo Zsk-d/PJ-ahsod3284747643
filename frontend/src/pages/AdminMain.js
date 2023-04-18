@@ -118,10 +118,23 @@ const Page = () => {
                               let questions = item.qus
                               let userIndex = 1
                               res1.results.forEach(item1=>{
-                                let questionIndex = 0
                                 let name = item1.name
-                                let correct = item1.answers.map(item2=>(item2.answerIds.join(',') == questions[questionIndex++].answers)?'Yes':'No').join(',')
-                                let resultStr = `${userIndex ++}. Name:${name}, Correct: ${correct} \r\n`
+                                let score = 0
+                                let correct
+                                // let correct = item1.answers.map(item2=>(item2.answerIds.join(',') == questions[questionIndex++].answers)?('Yes',score+=questions[questionIndex-1].score):'No').join(',')
+                                
+                                let tmp = []
+                                for(let i = 0;i < item1.answers.length; i++){
+                                  if(item1.answers[i].answerIds.join(',') == questions[i].answers){
+                                    tmp.push('Yes')
+                                    score += parseInt(questions[i].score)
+                                  }else{
+                                    tmp.push('No')
+                                  }
+                                }
+                                correct = tmp.join(',')
+                                
+                                let resultStr = `${userIndex ++}. Name: ${name}, Correct: ${correct}, Score: ${score} \r\n`
                                 str += resultStr
                               })
                             }

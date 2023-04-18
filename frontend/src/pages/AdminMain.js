@@ -5,6 +5,8 @@ import { message, Popover, Button, Input, Space, Descriptions, } from 'antd';
 import Header from '../components/StationHeader'
 import util from '../util';
 
+import copy from 'copy-to-clipboard'
+
 const Page = () => {
   const navigate = useNavigate()
   //   const location = useLocation()
@@ -72,7 +74,10 @@ const Page = () => {
               <div>
                 <Space size="middle">
                   <Popover trigger={'click'} placement="right" content={<>
-                    <label>{sessionid}</label><Button style={{ margin: 10 }} onClick={() => { }}>copy</Button>
+                    <label>Sessionid: {sessionid}</label><Button style={{ margin: 10 }} onClick={() => {
+                      copy(sessionid)
+                      reload()
+                     }}>copy</Button>
                   </>} title="Start">
                     {!item.active ? <Button style={{ margin: '10px 0px' }} type="primary"
                       onClick={() => {

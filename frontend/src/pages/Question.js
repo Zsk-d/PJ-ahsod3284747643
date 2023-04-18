@@ -13,6 +13,7 @@ const Page = () => {
   const [option4, soption4] = useState('')
   const [option5, soption5] = useState('')
   const [option6, soption6] = useState('')
+  const [thumbnail, sthumbnail] = useState('')
   const location = useLocation()
   const state = location.state
   const action = state.action
@@ -23,9 +24,10 @@ const Page = () => {
   // const [thumbnail, sthumbnail] = useState('')
 
   const onFinish = (values) => {
-    console.log('Success:', values);
     debugger
-    values = {...values, option1,option2,option3,option4,option5,option6}
+    console.log('Success:', values);
+    values.thumbnail = thumbnail
+    values = { ...values, option1, option2, option3, option4, option5, option6 }
     util.updateQuizById(record.id, [...record.questions, values], null, null, res => {
       if (res.error) {
         messageApi.error(res.error)
@@ -43,7 +45,7 @@ const Page = () => {
   }
   useEffect(() => {
     if (action === 'edit') {
-      const { content, type, timeLimit, score, url,option1,option2,option3,option4,option5,option6 } = state.record.question
+      const { content, type, timeLimit, score, url, option1, option2, option3, option4, option5, option6, thumbnail } = state.record.question
       sform({ content, type, timeLimit, score, url })
       soption1(option1)
       soption2(option2)
@@ -51,7 +53,7 @@ const Page = () => {
       soption4(option4)
       soption5(option5)
       soption6(option6)
-      console.log('11111111111111111111111111111')
+      sthumbnail(thumbnail)
     }
   }, [])
   return (
@@ -126,10 +128,22 @@ const Page = () => {
           <Form.Item
             label="Thumbnail"
             name="thumbnail">
-            <Input value={form.thumbnail} onChange={e => {
-              form.thumbnail = e.target.value
-              sform(form)
-            }} />
+            <img style={{ width: '100px', margin: '0px 10px' }} src={thumbnail} />
+            <input id="pic" type="file" onChange={() => {
+              let file = document.getElementById('pic').files[0]
+              let reader = new FileReader();
+              reader.readAsDataURL(file);
+              let AllowImgFileSize = 2100000
+              reader.onload = function (e) {
+                if (AllowImgFileSize != 0 && AllowImgFileSize < reader.result.length) {
+                  alert('Out of size!');
+                  return;
+                } else {
+                  sthumbnail(reader.result)
+                }
+              }
+            }}></input>
+
           </Form.Item>
           <Form.Item
             label="Score"

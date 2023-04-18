@@ -32,6 +32,20 @@ const Page = () => {
     })
   }, [])
   const reload = () => { window.location.reload() }
+  const onFileChange = e => {
+    let file = document.getElementById('pic').files[0]
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    let AllowImgFileSize = 2100000
+    reader.onload = function (e) {
+      if (AllowImgFileSize != 0 && AllowImgFileSize < reader.result.length) {
+        alert('Out of size!');
+        return;
+      } else {
+        sthumbnail(reader.result)
+      }
+    }
+  }
   return (
     <>
       {contextHolder}
@@ -43,10 +57,9 @@ const Page = () => {
               snewQuizName(e.target.value)
             }}></Input></div>
           <div style={{ display: 'inline-block' }}>
-            <label> thumbnail: </label>
-            <Input style={{ width: 200 }} value={thumbnail} onChange={e => {
-              sthumbnail(e.target.value)
-            }}></Input>
+            <label style={{margin: '0px 10px'}}> Thumbnail: </label>
+            {thumbnail ? <img style={{width: '100px', margin: '0px 10px'}} src={thumbnail} /> : null}
+            <input id="pic" type="file" onChange={() => { onFileChange() }}></input>
           </div>
           <Button style={{ margin: '10px 0px' }} onClick={() => {
             util.updateQuizById(record.id, null, newQuizName, thumbnail, res => {

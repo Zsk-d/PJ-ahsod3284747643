@@ -63,12 +63,12 @@ const Page = () => {
             scurrentGameId(res.question.content)
             swattingNext(false)
           }
-          if(res.question.type == 'multiple'){
+          if (res.question.type == 'multiple') {
             sanswers([])
             setTimeout(() => {
               document.getElementById('c1-el').click()
             }, 500);
-          }else{
+          } else {
             sanswers(1)
           }
           swatting(false)
@@ -102,7 +102,12 @@ const Page = () => {
       <div style={{ margin: 20 }}></div>
       {watting ? <><h2>Waiting for session to start...</h2></> : null}
       {question ? <>
-        <Descriptions title={question.content + ' - Remainder: ' + remainder} bordered>
+        <div style={{ margin: 10, display: 'flex', justifyContent: 'space-between' }}>
+          <div></div>
+          <div><label>{question.content}</label></div>
+          <div><label>Remainder:  {remainder}</label></div>
+        </div>
+        <Descriptions bordered>
           <Descriptions.Item label="Type">{question.type}</Descriptions.Item>
           <Descriptions.Item label="Thumbnail">
             <img style={{ width: 100 }} src={question.thumbnail} />
@@ -125,12 +130,12 @@ const Page = () => {
                 </Space>
               </Radio.Group>
             </> : <>
-              {question.option1 ? <Checkbox id='c1-el' value={'1'} onChange={e => { e.target.checked?answers.push('1'):answers.splice(answers.indexOf('1'), 1); console.log(answers)  }}>{question.option1}</Checkbox> : null}
-              {question.option2 ? <Checkbox value={'2'} onChange={e => { e.target.checked?answers.push('2'):answers.splice(answers.indexOf('2'), 1); console.log(answers)  }}>{question.option2}</Checkbox> : null}
-              {question.option3 ? <Checkbox value={'3'} onChange={e => { e.target.checked?answers.push('3'):answers.splice(answers.indexOf('3'), 1); console.log(answers)  }}>{question.option3}</Checkbox> : null}
-              {question.option4 ? <Checkbox value={'4'} onChange={e => { e.target.checked?answers.push('4'):answers.splice(answers.indexOf('4'), 1); console.log(answers)  }}>{question.option4}</Checkbox> : null}
-              {question.option5 ? <Checkbox value={'5'} onChange={e => { e.target.checked?answers.push('5'):answers.splice(answers.indexOf('5'), 1); console.log(answers)  }}>{question.option5}</Checkbox> : null}
-              {question.option6 ? <Checkbox value={'6'} onChange={e => { e.target.checked?answers.push('6'):answers.splice(answers.indexOf('6'), 1); console.log(answers)  }}>{question.option6}</Checkbox> : null}
+              {question.option1 ? <Checkbox id='c1-el' value={'1'} onChange={e => { e.target.checked ? answers.push('1') : answers.splice(answers.indexOf('1'), 1); console.log(answers) }}>{question.option1}</Checkbox> : null}
+              {question.option2 ? <Checkbox value={'2'} onChange={e => { e.target.checked ? answers.push('2') : answers.splice(answers.indexOf('2'), 1); console.log(answers) }}>{question.option2}</Checkbox> : null}
+              {question.option3 ? <Checkbox value={'3'} onChange={e => { e.target.checked ? answers.push('3') : answers.splice(answers.indexOf('3'), 1); console.log(answers) }}>{question.option3}</Checkbox> : null}
+              {question.option4 ? <Checkbox value={'4'} onChange={e => { e.target.checked ? answers.push('4') : answers.splice(answers.indexOf('4'), 1); console.log(answers) }}>{question.option4}</Checkbox> : null}
+              {question.option5 ? <Checkbox value={'5'} onChange={e => { e.target.checked ? answers.push('5') : answers.splice(answers.indexOf('5'), 1); console.log(answers) }}>{question.option5}</Checkbox> : null}
+              {question.option6 ? <Checkbox value={'6'} onChange={e => { e.target.checked ? answers.push('6') : answers.splice(answers.indexOf('6'), 1); console.log(answers) }}>{question.option6}</Checkbox> : null}
             </>}
           </Descriptions.Item>
         </Descriptions>
@@ -138,10 +143,9 @@ const Page = () => {
           let ids = []
           if (answers.length == undefined) {
             ids.push(answers)
-          }else{
+          } else {
             ids = answers
           }
-          debugger
           util.submitAnswer(playerId, ids, res => {
             let ans = question.answers.split(',')
             let ansStr = ""

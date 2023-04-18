@@ -8,6 +8,7 @@ import AdminMain from './pages/AdminMain';
 import QuizMain from './pages/QuizMain';
 import Question from './pages/Question';
 import Game from './pages/Game';
+import Results from './pages/Results';
 
 function App () {
   return (
@@ -23,6 +24,7 @@ function App () {
               <Route path='/quiz-main' element={<QuizMain />}></Route>
               <Route path='/question' element={<Question />}></Route>
               <Route path='/game' element={<Game />}></Route>
+              <Route path='/results' element={<Results />}></Route>
             </Routes>
           </div>
         </Router>

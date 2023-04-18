@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { message, Popover, Button, Input, Space, Descriptions,  } from 'antd';
+import { message, Popover, Button, Input, Space, Descriptions, } from 'antd';
 
 import Header from '../components/StationHeader'
 import util from '../util';
@@ -21,14 +21,14 @@ const Page = () => {
         messageApi.error(res.error)
       } else {
         tmp = res.quizzes
-        tmp.forEach(item=>{
+        tmp.forEach(item => {
           util.getQuizById(item.id, res => {
             if (res.error) {
               messageApi.error(res.error)
             } else {
               item.qus = res.questions
               let times = 0
-              item.qus.forEach(item=>{
+              item.qus.forEach(item => {
                 times += parseInt(item.timeLimit)
               })
               item.timeTotal = times
@@ -65,7 +65,7 @@ const Page = () => {
         {quizList.map(item => {
           return <Descriptions key={item.name}>
             <Descriptions.Item label="Name">{item.name}</Descriptions.Item>
-            <Descriptions.Item label="Thumbnail"><img v-show="showQR" style={{width: 100}} src={item.thumbnail} /></Descriptions.Item>
+            <Descriptions.Item label="Thumbnail"><img v-show="showQR" style={{ width: 100 }} src={item.thumbnail} /></Descriptions.Item>
             <Descriptions.Item label="Number of questions">{item.qus.length}</Descriptions.Item>
             <Descriptions.Item label="Total time">{item.timeTotal} s</Descriptions.Item>
             <Descriptions.Item label="Action">
@@ -108,53 +108,57 @@ const Page = () => {
                       if (res.error) {
                         messageApi.error(res.error)
                       } else {
-                        if(res.stage == item.qus.length){
-                          util.getResultsBySessionid(item.active, res1=>{
-                            let str = 'Game over: \r\n'
-                            if(res1.results.length == 0){
+                        if (res.stage == item.qus.length) {
+                          let results = []
+                          util.getResultsBySessionid(item.active, res1 => {
+                            let str = 'Game over !'
+                            if (res1.results.length == 0) {
                               str += 'No one answered the question'
-                            }else{
-                              debugger
+                            } else {
                               let questions = item.qus
-                              let userIndex = 1
-                              res1.results.forEach(item1=>{
+                              res1.results.forEach(item1 => {
                                 let name = item1.name
                                 let score = 0
-                                let correct
+                                let correct = ''
                                 // let correct = item1.answers.map(item2=>(item2.answerIds.join(',') == questions[questionIndex++].answers)?('Yes',score+=questions[questionIndex-1].score):'No').join(',')
-                                
+                                let totalScore = 0
                                 let tmp = []
-                                for(let i = 0;i < item1.answers.length; i++){
-                                  if(item1.answers[i].answerIds.join(',') == questions[i].answers){
+                                for (let i = 0; i < item1.answers.length; i++) {
+                                  if (item1.answers[i].answerIds.join(',') == questions[i].answers) {
                                     tmp.push('Yes')
                                     score += parseInt(questions[i].score)
-                                  }else{
+                                  } else {
                                     tmp.push('No')
                                   }
+                                  totalScore += parseInt(questions[i].score)
                                 }
                                 correct = tmp.join(',')
-                                
-                                let resultStr = `${userIndex ++}. Name: ${name}, Correct: ${correct}, Score: ${score} \r\n`
-                                str += resultStr
+
+                                results.push({
+                                  name,
+                                  correct,
+                                  score,
+                                  totalScore
+                                })
                               })
                             }
                             alert(str)
-                            reload()
+                            navigate('/results', { state: { results } })
                           })
-                        }else{
+                        } else {
                           reload()
                         }
                       }
                     })
-                   }}>Next</Button>
-                   <Button onClick={() => {
+                  }}>Next</Button>
+                  <Button onClick={() => {
                     navigate('/quiz-main', { state: { record: item } })
                   }}>edit</Button>
                   <Button onClick={() => {
                     util.deleteQuizById(item.id, res => {
                       reload()
                     })
-                   }}>delete</Button>
+                  }}>delete</Button>
                 </Space>
               </div>
             </Descriptions.Item>

@@ -48,9 +48,10 @@ const Page = () => {
             alert('Game over!')
             clearInterval(timer)
             util.getresults(playerId, res => {
-              let tmp = "Your game result: \r\n"
               let index = 1
-              navigate('/game-res', { state: { res: selfAnswer.map(item => `${index++}. Correct: ${item.correct?'Yes':'No'}`) } })
+              let score = 0
+              selfAnswer.forEach(item=>score += item.score)
+              navigate('/game-res', { state: { score, res: selfAnswer.map(item => `${index++}. Correct: ${item.correct}`) } })
             })
           }
         } else {
@@ -149,10 +150,12 @@ const Page = () => {
             let a1 = ids.map(item => question['option' + item]).join(',')
             let a2 = ansStr.substring(0, ansStr.length - 1)
             alert('Answer: ' + ansStr.substring(0, ansStr.length - 1))
+            debugger
             let thisQuestion = {
               self: a1,
               answer: a2,
-              correct: a1 == a2 ? 'Yes' : 'No'
+              correct: a1 == a2 ? 'Yes' : 'No',
+              score: a1 == a2? parseInt(question.score):0
             }
             selfAnswer.push(thisQuestion)
             sselfAnswer(selfAnswer)

@@ -50,9 +50,7 @@ const Page = () => {
             util.getresults(playerId, res => {
               let tmp = "Your game result: \r\n"
               let index = 1
-              tmp += selfAnswer.map(item => `${index++}. Your answer: ${item.self}, Correct answer: ${item.answer} ,Correct: ${item.correct}`).join('\r\n')
-              alert(tmp)
-              window.history.back()
+              navigate('/game-res', { state: { res: selfAnswer.map(item => `${index++}. Correct: ${item.correct?'Yes':'No'}`) } })
             })
           }
         } else {

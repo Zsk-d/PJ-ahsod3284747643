@@ -9,6 +9,7 @@ import QuizMain from './pages/QuizMain';
 import Question from './pages/Question';
 import Game from './pages/Game';
 import Results from './pages/Results';
+import GameRes from './pages/GameRes';
 
 function App () {
   return (
@@ -25,6 +26,7 @@ function App () {
               <Route path='/question' element={<Question />}></Route>
               <Route path='/game' element={<Game />}></Route>
               <Route path='/results' element={<Results />}></Route>
+              <Route path='/game-res' element={<GameRes />}></Route>
             </Routes>
           </div>
         </Router>
